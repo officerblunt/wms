@@ -1,4 +1,6 @@
-﻿namespace Warehouse.Api.Middleware;
+﻿using Serilog.Context;
+
+namespace Warehouse.Api.Middleware;
 
 public class CorrelationMiddleware(RequestDelegate next)
 {
@@ -10,7 +12,10 @@ public class CorrelationMiddleware(RequestDelegate next)
         }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
-
-        await next(context);
+        
+        using (LogContext.PushProperty("CorrelationId", correlationId.ToString()))
+        {
+            await next(context);
+        }
     }
 }

@@ -14,8 +14,8 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter())
     .CreateLogger();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<CorrelationMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

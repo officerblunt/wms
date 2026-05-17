@@ -12,19 +12,19 @@ public class OrdersController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{orderId::guid}/reserve")]
+    [HttpPost("{orderId:guid}/reserve")]
     public IActionResult Reserve(Guid orderId, CancellationToken token)
     {
         return Ok();
     }
     
-    [HttpPost("{orderId::guid}/cancel-reservation")]
+    [HttpPost("{orderId:guid}/cancel-reservation")]
     public IActionResult CancelReservation(Guid orderId, CancellationToken token)
     {
         return Ok();
     }
     
-    [HttpPost("{orderId::guid}/pick")]
+    [HttpPost("{orderId:guid}/pick")]
     public IActionResult Pick(Guid orderId, CancellationToken token)
     {
         return Ok();

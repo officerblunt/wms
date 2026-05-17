@@ -13,8 +13,8 @@ public class StockController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{productId::guid}")]
-    public IActionResult GetProduct([FromBody] Guid productId, CancellationToken token)
+    [HttpGet("{productId:guid}")]
+    public IActionResult GetProduct([FromQuery] Guid productId, CancellationToken token)
     {
         var response = new ProductDto
         {

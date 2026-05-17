@@ -7,25 +7,25 @@ namespace Warehouse.Api.Controllers;
 public class OrdersController : ControllerBase
 {
     [HttpPost]
-    public IActionResult Post()
+    public IActionResult Post(CancellationToken token)
     {
         return Ok();
     }
 
     [HttpPost("{orderId::guid}/reserve")]
-    public IActionResult Reserve(Guid orderId)
+    public IActionResult Reserve(Guid orderId, CancellationToken token)
     {
         return Ok();
     }
     
     [HttpPost("{orderId::guid}/cancel-reservation")]
-    public IActionResult CancelReservation(Guid orderId)
+    public IActionResult CancelReservation(Guid orderId, CancellationToken token)
     {
         return Ok();
     }
     
     [HttpPost("{orderId::guid}/pick")]
-    public IActionResult Pick(Guid orderId)
+    public IActionResult Pick(Guid orderId, CancellationToken token)
     {
         return Ok();
     }

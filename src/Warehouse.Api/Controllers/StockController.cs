@@ -8,15 +8,15 @@ namespace Warehouse.Api.Controllers;
 public class StockController : ControllerBase
 {
     [HttpPost("receive")]
-    public IActionResult ReceiveProduct(ProductDto dto)
+    public IActionResult ReceiveProduct([FromBody] ProductDto dto, CancellationToken token)
     {
         return Ok();
     }
 
     [HttpGet("{productId::guid}")]
-    public IActionResult GetProduct(Guid productId)
+    public IActionResult GetProduct([FromBody] Guid productId, CancellationToken token)
     {
-        var response = new ProductDto()
+        var response = new ProductDto
         {
             Name = "TEST",
             Sku = "TEST",

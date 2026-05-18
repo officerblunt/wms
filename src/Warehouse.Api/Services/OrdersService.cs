@@ -12,5 +12,5 @@ public class OrdersService : IOrderService
         return !EmulateQuantityLimitExceedCheck();
     }
 
-    private bool EmulateQuantityLimitExceedCheck() => _random.Next(0, 1) == 1;
+    private bool EmulateQuantityLimitExceedCheck() => _random.Next(1, 100) % 2 == 0;
 }

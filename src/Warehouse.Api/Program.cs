@@ -11,14 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
-
-builder.Services.AddMediatR(config =>
-{
-    config.RegisterServicesFromAssemblyContaining<Program>();
-
-    config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
-});
+builder.Services.AddControllers(options => { options.Filters.Add<ValidationFilter>(); });
 
 builder.Services.AddSingleton<IOrderService, OrdersService>();
 

@@ -7,7 +7,7 @@ namespace Warehouse.Api.Controllers;
 public class WarehouseLocationsController : ControllerBase
 {
     [HttpPost("api/locations")]
-    public IActionResult AddLocation([FromBody] LocationDto dto, CancellationToken token)
+    public async Task<IActionResult> AddLocation([FromBody] LocationDto dto, CancellationToken token)
     {
         return Created();
     }

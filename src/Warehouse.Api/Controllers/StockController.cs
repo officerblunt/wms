@@ -8,13 +8,13 @@ namespace Warehouse.Api.Controllers;
 public class StockController : ControllerBase
 {
     [HttpPost("receive")]
-    public IActionResult ReceiveProduct([FromBody] ProductDto dto, CancellationToken token)
+    public async Task<IActionResult> ReceiveProduct([FromBody] ProductDto dto, CancellationToken token)
     {
         return Ok();
     }
 
     [HttpGet("{productId:guid}")]
-    public IActionResult GetProduct([FromQuery] Guid productId, CancellationToken token)
+    public async Task<IActionResult> GetProduct([FromQuery] Guid productId, CancellationToken token)
     {
         var response = new ProductDto
         {

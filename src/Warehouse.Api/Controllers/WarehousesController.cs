@@ -7,7 +7,7 @@ namespace Warehouse.Api.Controllers;
 public class WarehousesController : ControllerBase
 {
     [HttpPost("api/warehouses")]
-    public IActionResult AddWarehouse([FromBody] WarehouseDto dto, CancellationToken token)
+    public async Task<IActionResult> AddWarehouse([FromBody] WarehouseDto dto, CancellationToken token)
     {
         return Created();
     }

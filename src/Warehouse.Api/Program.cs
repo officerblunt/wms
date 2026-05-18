@@ -1,12 +1,26 @@
+using FluentValidation;
 using Serilog;
+using Warehouse.Api.Interfaces;
 using Warehouse.Api.Middleware;
+using Warehouse.Api.Services;
+using Warehouse.Api.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssemblyContaining<Program>();
+
+    config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+});
+
+builder.Services.AddSingleton<IOrderService, OrdersService>();
 
 var app = builder.Build();
 

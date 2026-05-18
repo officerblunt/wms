@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Warehouse.Api.Interfaces;
+using Warehouse.Infrastructure.Dto;
 
 namespace Warehouse.Api.Controllers;
 
@@ -7,9 +9,11 @@ namespace Warehouse.Api.Controllers;
 public class OrdersController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Post(CancellationToken token)
+    public async Task<IActionResult> Post([FromBody] ReserveStockDto dto, [FromServices] IOrderService orderService,
+        CancellationToken token)
     {
-        return Ok();
+        if (await orderService.CreateOrder(dto, token)) return Ok();
+        return BadRequest("Limit of stock quantity is exceeded");
     }
 
     [HttpPost("{orderId:guid}/reserve")]
@@ -17,13 +21,13 @@ public class OrdersController : ControllerBase
     {
         return Ok();
     }
-    
+
     [HttpPost("{orderId:guid}/cancel-reservation")]
     public async Task<IActionResult> CancelReservation(Guid orderId, CancellationToken token)
     {
         return Ok();
     }
-    
+
     [HttpPost("{orderId:guid}/pick")]
     public async Task<IActionResult> Pick(Guid orderId, CancellationToken token)
     {

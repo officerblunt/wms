@@ -5,4 +5,7 @@
     <Project Path="src/Warehouse.Domain/Warehouse.Domain.csproj" />
     <Project Path="src/Warehouse.Infrastructure/Warehouse.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="Warehouse.Api.Tests/Warehouse.Api.Tests.csproj" />
+  </Folder>
 </Solution>

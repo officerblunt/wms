@@ -194,6 +194,7 @@ public partial class WmsContext : DbContext
             entity.Property(e => e.CancelledAt).HasColumnName("cancelled_at");
             entity.Property(e => e.ConsumedAt).HasColumnName("consumed_at");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.ExpiresAt).HasColumnName("expires_at");
             entity.Property(e => e.IdempotencyKey).HasColumnName("idempotency_key");
             entity.Property(e => e.LocationId).HasColumnName("location_id");
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");

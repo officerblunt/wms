@@ -22,6 +22,8 @@ public partial class StockReservation
     public DateTime? CancelledAt { get; set; }
 
     public DateTime? ConsumedAt { get; set; }
+    
+    public DateTime? ExpiresAt { get; set; }
 
     public virtual WarehouseLocation Location { get; set; } = null!;
 

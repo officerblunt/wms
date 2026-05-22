@@ -1,6 +1,8 @@
-﻿namespace Warehouse.Api.Services.Background;
+﻿using Warehouse.Infrastructure.Data;
 
-public class ExpiredReservationsCleaner : BackgroundService
+namespace Warehouse.Api.Services.Background;
+
+public class ExpiredReservationsCleaner(WmsContext context) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -13,6 +15,5 @@ public class ExpiredReservationsCleaner : BackgroundService
 
     private async Task CancelExpiredReservations(CancellationToken token)
     {
-        
     }
 }

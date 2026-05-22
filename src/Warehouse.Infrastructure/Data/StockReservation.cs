@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Warehouse.Api;
+﻿namespace Warehouse.Infrastructure.Data;
 
 public partial class StockReservation
 {

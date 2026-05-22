@@ -23,7 +23,8 @@ builder.Services.AddDbContext<WmsContext>(options => options.UseNpgsql(
     x => x.MigrationsAssembly(typeof(WmsContext).Assembly.FullName)));
 
 builder.Services.AddApiAndValidation()
-    .RegisterServices();
+    .RegisterServices()
+    .AddBackgroundServices();
 
 var app = builder.Build();
 

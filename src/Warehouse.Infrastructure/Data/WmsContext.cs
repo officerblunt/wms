@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Warehouse.Api;
 
 namespace Warehouse.Infrastructure.Data;
 
@@ -26,7 +25,7 @@ public partial class WmsContext : DbContext
 
     public virtual DbSet<StockReservation> StockReservations { get; set; }
 
-    public virtual DbSet<Api.Warehouse> Warehouses { get; set; }
+    public virtual DbSet<Warehouse> Warehouses { get; set; }
 
     public virtual DbSet<WarehouseLocation> WarehouseLocations { get; set; }
 
@@ -217,7 +216,7 @@ public partial class WmsContext : DbContext
                 .HasConstraintName("fk_warehouse");
         });
 
-        modelBuilder.Entity<Api.Warehouse>(entity =>
+        modelBuilder.Entity<Warehouse>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_warehouse");
 

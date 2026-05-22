@@ -2,6 +2,7 @@
 using Warehouse.Api.Interfaces;
 using Warehouse.Api.Middleware;
 using Warehouse.Api.Services;
+using Warehouse.Api.Services.Background;
 using Warehouse.Api.Validators;
 
 namespace Warehouse.Api.Extensions;
@@ -21,6 +22,12 @@ public static class ApplicationBuilderExtensions
         internal IServiceCollection RegisterServices()
         {
             services.AddSingleton<IOrderService, OrdersService>();
+            return services;
+        }
+
+        internal IServiceCollection AddBackgroundServices()
+        {
+            services.AddHostedService<ExpiredReservationsCleaner>();
             return services;
         }
     }

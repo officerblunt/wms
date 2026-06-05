@@ -28,6 +28,7 @@ public partial class WmsContext : DbContext
     public virtual DbSet<Warehouse> Warehouses { get; set; }
 
     public virtual DbSet<WarehouseLocation> WarehouseLocations { get; set; }
+    public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -250,6 +251,23 @@ public partial class WmsContext : DbContext
                 .HasForeignKey(d => d.WarehouseId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_warehouse");
+        });
+
+        modelBuilder.Entity<OutboxMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_outbox_message");
+
+            entity.ToTable("outbox_messages");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.OccurredOnUtc).HasColumnName("occurred_on_utc");
+            entity.Property(e => e.ExpiresOnUtc).HasColumnName("expires_on_utc");
+            entity.Property(e => e.Error).HasColumnName("error");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 var databaseConnectionSection = builder.Configuration.GetSection("DatabaseConnection");
 var databaseConnection = databaseConnectionSection.Get<DatabaseConnection>() ??
                          throw new Exception("Failed to get db settings");
+
 builder.Services.AddDbContext<WmsContext>(options => options.UseNpgsql(
     $"Server={databaseConnection.Server};Database={databaseConnection.Database};" +
     $"User Id={databaseConnection.User};Password={databaseConnection.Password};",

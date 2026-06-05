@@ -8,7 +8,7 @@ internal sealed partial class CreateReserveValidator : AbstractValidator<Reserve
 {
     public CreateReserveValidator()
     {
-        RuleFor(reserve => reserve.Sku)
+        RuleForEach(reserve => reserve.Sku)
             .NotEmpty().WithMessage("Sku is required")
             .Matches(SkuRegex()).WithMessage("Sku must match");
         

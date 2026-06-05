@@ -3,7 +3,7 @@ using Warehouse.Infrastructure.Dto;
 
 namespace Warehouse.Api.Services;
 
-public class OrdersService : IOrderService
+public class OrdersService(IServiceProvider serviceProvider) : IOrderService
 {
     public async Task<bool> CreateOrder(ReserveStockDto dto, CancellationToken token)
     {

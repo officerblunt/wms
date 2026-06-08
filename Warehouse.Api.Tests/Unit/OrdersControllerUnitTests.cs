@@ -15,7 +15,7 @@ public class OrdersControllerUnitTests
     [Fact]
     public async Task Post_WhenServiceSucceeds_ReturnsOkResult()
     {
-        var dto = new ReserveStockDto { Sku = "WMS-55555", Quantity = 1, WarehouseId = Guid.NewGuid() };
+        var dto = new ReserveStockDto { Sku = ["WMS-55555"], Quantity = 1, WarehouseId = Guid.NewGuid() };
         var token = CancellationToken.None;
 
         _orderServiceMock.CreateOrder(dto, token).Returns(true);
@@ -30,7 +30,7 @@ public class OrdersControllerUnitTests
     [Fact]
     public async Task Post_WhenServiceFails_ReturnsBadRequest()
     {
-        var dto = new ReserveStockDto { Sku = "asdf", Quantity = 1, WarehouseId = Guid.NewGuid() };
+        var dto = new ReserveStockDto { Sku = ["asdf"], Quantity = 1, WarehouseId = Guid.NewGuid() };
         var token = CancellationToken.None;
 
         _orderServiceMock.CreateOrder(dto, token).Returns(false);

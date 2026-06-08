@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Warehouse.Infrastructure.Enum;
 
 namespace Warehouse.Infrastructure.Data;
 
@@ -55,6 +56,9 @@ public partial class WmsContext : DbContext
             entity.Property(e => e.PickedAt).HasColumnName("picked_at");
             entity.Property(e => e.ReservedAt).HasColumnName("reserved_at");
             entity.Property(e => e.ShippedAt).HasColumnName("shipped_at");
+            entity.Property(e => e.Status)
+                .HasColumnName("status")
+                .HasColumnType("order_status");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>

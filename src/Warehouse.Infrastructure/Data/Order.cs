@@ -1,4 +1,6 @@
-﻿namespace Warehouse.Infrastructure.Data;
+﻿using Warehouse.Infrastructure.Enum;
+
+namespace Warehouse.Infrastructure.Data;
 
 public partial class Order
 {
@@ -17,4 +19,6 @@ public partial class Order
     public DateTime? ShippedAt { get; set; }
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    
+    public OrderStatus Status { get; set; }
 }

@@ -28,11 +28,17 @@ dataSourceBuilder.MapEnum<WarehouseLocationStatus>("warehouse_location_status");
 dataSourceBuilder.MapEnum<WarehouseLocationType>("warehouse_location_type");
 var dataSource = dataSourceBuilder.Build();
 
-builder.Services.AddDbContext<WmsContext>(options => options.UseNpgsql(
-        dataSource,
-        x => x.MigrationsAssembly(typeof(WmsContext).Assembly.FullName)
-    )
-);
+builder.Services.AddDbContext<WmsContext>((_, options) =>
+{
+    options.UseNpgsql(dataSource, optionsBuilder =>
+    {
+        optionsBuilder.MapEnum<OrderStatus>("order_status");
+        optionsBuilder.MapEnum<WarehouseStatus>("warehouse_status");
+        optionsBuilder.MapEnum<WarehouseLocationStatus>("warehouse_location_status");
+        optionsBuilder.MapEnum<WarehouseLocationType>("warehouse_location_type");
+        optionsBuilder.MigrationsAssembly(typeof(WmsContext).Assembly.FullName);
+    });
+});
 
 builder.Services.AddApiAndValidation()
     .RegisterServices()

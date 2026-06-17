@@ -1,14 +1,9 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Serilog;
-using Warehouse.Api;
+using Serilog.Formatting.Json;
 using Warehouse.Api.Extensions;
-using Warehouse.Api.Interfaces;
-using Warehouse.Api.Middleware;
-using Warehouse.Api.Services;
-using Warehouse.Api.Validators;
-using Warehouse.Infrastructure;
+using Warehouse.Domain.Communication;
 using Warehouse.Infrastructure.Data;
 using Warehouse.Infrastructure.Enum;
 
@@ -40,9 +35,13 @@ builder.Services.AddDbContext<WmsContext>((_, options) =>
     });
 });
 
+builder.Services.Configure<RabbitMqOptions>(
+    builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+
 builder.Services.AddApiAndValidation()
     .RegisterServices()
-    .AddBackgroundServices();
+    .AddBackgroundServices()
+    .AddRabbitMq();
 
 var app = builder.Build();
 
@@ -50,7 +49,7 @@ app.UseMiddleware()
     .AddApiAndValidation();
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter())
+    .WriteTo.Console(new JsonFormatter())
     .CreateLogger();
 
 app.Run();

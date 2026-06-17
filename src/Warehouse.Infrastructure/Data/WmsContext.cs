@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Warehouse.Infrastructure.Enum;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Warehouse.Domain.Abstractions;
 
 namespace Warehouse.Infrastructure.Data;
 
@@ -275,6 +276,34 @@ public partial class WmsContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var updatedEntities = ChangeTracker.Entries<Entity>()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified)
+            .Select(e => e.Entity)
+            .ToList();
+
+        var domainEvents = updatedEntities.SelectMany(x => x.DomainEvents).ToList();
+
+        foreach (var entity in updatedEntities)
+        {
+            entity.ClearDomainEvents();
+        }
+
+        foreach (var outboxMessage in domainEvents.Select(domainEvent => new OutboxMessage
+                 {
+                     Id = Guid.NewGuid(),
+                     OccurredOnUtc = DateTime.UtcNow,
+                     Type = domainEvent.GetType().Name,
+                     Content = JsonSerializer.Serialize(domainEvent, domainEvent.GetType())
+                 }))
+        {
+            OutboxMessages.Add(outboxMessage);
+        }
+        
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

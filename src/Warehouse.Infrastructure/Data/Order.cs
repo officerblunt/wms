@@ -1,8 +1,10 @@
-﻿using Warehouse.Infrastructure.Enum;
+﻿using Warehouse.Domain.Abstractions;
+using Warehouse.Domain.Event;
+using Warehouse.Infrastructure.Enum;
 
 namespace Warehouse.Infrastructure.Data;
 
-public partial class Order
+public partial class Order : Entity
 {
     public Guid Id { get; set; }
 
@@ -21,4 +23,21 @@ public partial class Order
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     
     public OrderStatus Status { get; set; }
+    
+    public void Reserve()
+    {
+        ReservedAt = DateTime.UtcNow;
+        RaiseDomainEvent(new OrderUpdatedDomainEvent
+        {
+            OrderId = Id,
+            Property = "Status",
+            NewValue = "Reserved"
+        });
+    }
+
+    public void Create()
+    {
+        CreatedAt = DateTime.UtcNow;
+        RaiseDomainEvent(new OrderCreatedDomainEvent(Id));
+    }
 }

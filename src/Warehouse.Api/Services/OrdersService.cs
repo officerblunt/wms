@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Warehouse.Api.Interfaces;
-using Warehouse.Domain.Event;
+﻿using Warehouse.Api.Interfaces;
 using Warehouse.Infrastructure.Data;
 using Warehouse.Infrastructure.Dto;
 using Warehouse.Infrastructure.Enum;
@@ -23,19 +21,8 @@ public class OrdersService(IServiceProvider serviceProvider) : IOrderService
         };
 
         context.Orders.Add(order);
-
-        var domainEvent = new OrderCreatedDomainEvent(order.Id);
-
-        var outboxMessage = new OutboxMessage
-        {
-            Id = Guid.NewGuid(),
-            OccurredOnUtc = DateTime.UtcNow,
-            Type = domainEvent.GetType().FullName ?? "OrderCreatedDomainEvent",
-            Content = JsonConvert.SerializeObject(domainEvent),
-        };
-
-        context.OutboxMessages.Add(outboxMessage);
-
+        
+        order.Create();
         await context.SaveChangesAsync(token);
 
         return true;
@@ -51,27 +38,13 @@ public class OrdersService(IServiceProvider serviceProvider) : IOrderService
         try
         {
             if (order is { Status: OrderStatus.Reserved }) return true;
+            
             order.Status = OrderStatus.Reserved;
             order.ReservedAt = DateTime.UtcNow;
-
+            
             context.Orders.Update(order);
-
-            var domainEvent = new OrderUpdatedDomainEvent
-            {
-                OrderId = orderId,
-                Property = "Status",
-                NewValue = "Reserved",
-            };
-
-            var outboxMessage = new OutboxMessage()
-            {
-                Id = Guid.NewGuid(),
-                OccurredOnUtc = DateTime.UtcNow,
-                Type = domainEvent.GetType().FullName ?? "OrderUpdatedDomainEvent",
-                Content = JsonConvert.SerializeObject(domainEvent),
-            };
-
-            await context.OutboxMessages.AddAsync(outboxMessage, token);
+            order.Reserve();
+            
             await context.SaveChangesAsync(token);
             return true;
         }

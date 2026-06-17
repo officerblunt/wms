@@ -37,7 +37,7 @@ public class OrdersService(IServiceProvider serviceProvider) : IOrderService
         context.OutboxMessages.Add(outboxMessage);
 
         await context.SaveChangesAsync(token);
-        
+
         return true;
     }
 
@@ -50,7 +50,9 @@ public class OrdersService(IServiceProvider serviceProvider) : IOrderService
 
         try
         {
+            if (order is { Status: OrderStatus.Reserved }) return true;
             order.Status = OrderStatus.Reserved;
+            order.ReservedAt = DateTime.UtcNow;
 
             context.Orders.Update(order);
 

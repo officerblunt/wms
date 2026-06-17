@@ -2,7 +2,7 @@
 
 namespace Warehouse.Domain.Event;
 
-public class OrderUpdatedDomainEvent() : IDomainEvent
+public class OrderUpdatedDomainEvent : IDomainEvent
 {
     public required Guid OrderId { get; set; }
     public DateTime TimeStamp { get; } = DateTime.UtcNow;

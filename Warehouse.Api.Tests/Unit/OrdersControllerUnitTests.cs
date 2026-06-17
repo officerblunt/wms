@@ -9,8 +9,14 @@ namespace Warehouse.Api.Tests.Unit;
 
 public class OrdersControllerUnitTests
 {
-    private readonly IOrderService _orderServiceMock = Substitute.For<IOrderService>();
-    private readonly OrdersController _controller = new();
+    private readonly IOrderService _orderServiceMock;
+    private readonly OrdersController _controller;
+    
+    public OrdersControllerUnitTests()
+    {
+        _orderServiceMock = Substitute.For<IOrderService>();
+        _controller = new(_orderServiceMock);
+    }
 
     [Fact]
     public async Task Post_WhenServiceSucceeds_ReturnsOkResult()
@@ -20,7 +26,7 @@ public class OrdersControllerUnitTests
 
         _orderServiceMock.CreateOrder(dto, token).Returns(true);
 
-        var result = await _controller.Post(dto, _orderServiceMock, token);
+        var result = await _controller.Post(dto, token);
 
         result.Should().BeOfType<OkResult>();
         
@@ -35,7 +41,7 @@ public class OrdersControllerUnitTests
 
         _orderServiceMock.CreateOrder(dto, token).Returns(false);
 
-        var result = await _controller.Post(dto, _orderServiceMock, token);
+        var result = await _controller.Post(dto, token);
 
         result.Should().BeOfType<BadRequestObjectResult>();
         

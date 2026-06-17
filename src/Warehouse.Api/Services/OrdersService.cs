@@ -40,4 +40,42 @@ public class OrdersService(IServiceProvider serviceProvider) : IOrderService
         
         return true;
     }
+
+    public async Task<bool> ReserveOrder(Guid orderId, CancellationToken token)
+    {
+        var context = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<WmsContext>();
+
+        var order = context.Orders.SingleOrDefault(o => o.Id == orderId);
+        ArgumentNullException.ThrowIfNull(order);
+
+        try
+        {
+            order.Status = OrderStatus.Reserved;
+
+            context.Orders.Update(order);
+
+            var domainEvent = new OrderUpdatedDomainEvent
+            {
+                OrderId = orderId,
+                Property = "Status",
+                NewValue = "Reserved",
+            };
+
+            var outboxMessage = new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                OccurredOnUtc = DateTime.UtcNow,
+                Type = domainEvent.GetType().FullName ?? "OrderUpdatedDomainEvent",
+                Content = JsonConvert.SerializeObject(domainEvent),
+            };
+
+            await context.OutboxMessages.AddAsync(outboxMessage, token);
+            await context.SaveChangesAsync(token);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

@@ -6,4 +6,6 @@ public interface IOrderService
 {
     Task<bool> CreateOrder(ReserveStockDto dto, CancellationToken token);
     Task<bool> ReserveOrder(Guid orderId, CancellationToken token);
+    Task<bool> CancelOrder(Guid orderId, CancellationToken token);
+    Task<bool> PickOrder(Guid orderId, CancellationToken token);
 }

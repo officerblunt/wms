@@ -21,23 +21,37 @@ public partial class Order : Entity
     public DateTime? ShippedAt { get; set; }
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-    
+
     public OrderStatus Status { get; set; }
-    
-    public void Reserve()
-    {
-        ReservedAt = DateTime.UtcNow;
+
+    public void Reserve() =>
         RaiseDomainEvent(new OrderUpdatedDomainEvent
         {
             OrderId = Id,
             Property = "Status",
             NewValue = "Reserved"
         });
-    }
 
-    public void Create()
+    public void Create() => RaiseDomainEvent(new OrderCreatedDomainEvent(Id));
+
+    public void Cancel() => RaiseDomainEvent(new OrderUpdatedDomainEvent()
     {
-        CreatedAt = DateTime.UtcNow;
-        RaiseDomainEvent(new OrderCreatedDomainEvent(Id));
-    }
+        OrderId = Id,
+        Property = "Status",
+        NewValue = "Cancelled"
+    });
+
+    public void BeginPickingProcess() => RaiseDomainEvent(new OrderUpdatedDomainEvent()
+    {
+        OrderId = Id,
+        Property = "Status",
+        NewValue = "Picking"
+    });
+
+    public void EndPickingProcess() => RaiseDomainEvent(new OrderUpdatedDomainEvent()
+    {
+        OrderId = Id,
+        Property = "Status",
+        NewValue = "Picked"
+    });
 }

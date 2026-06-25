@@ -3,8 +3,8 @@
 public sealed class OutboxMessage
 {
     public Guid Id { get; set; }
-    public string Type { get; set; }
-    public string Content { get; set; }
+    public required string Type { get; set; }
+    public required string Content { get; set; }
     public DateTime OccurredOnUtc { get; set; }
     public DateTime? ExpiresOnUtc { get; set; }
     public string? Error { get; set; }

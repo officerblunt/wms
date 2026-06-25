@@ -25,12 +25,14 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     [HttpPost("{orderId:guid}/cancel-reservation")]
     public async Task<IActionResult> CancelReservation(Guid orderId, CancellationToken token)
     {
-        return Ok();
+        if (await orderService.CancelOrder(orderId, token)) return Ok();
+        return BadRequest("Failed to cancel order");
     }
 
     [HttpPost("{orderId:guid}/pick")]
     public async Task<IActionResult> Pick(Guid orderId, CancellationToken token)
     {
-        return Ok();
+        if (await orderService.PickOrder(orderId, token)) return Ok();
+        return BadRequest("Failed to pick order");
     }
 }

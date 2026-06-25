@@ -38,7 +38,7 @@ builder.Services.AddDbContext<WmsContext>((_, options) =>
 builder.Services.Configure<RabbitMqOptions>(
     builder.Configuration.GetSection(RabbitMqOptions.SectionName));
 
-builder.Services.AddApiAndValidation()
+builder.Services.AddValidation()
     .RegisterServices()
     .AddBackgroundServices()
     .AddRabbitMq();
@@ -46,7 +46,7 @@ builder.Services.AddApiAndValidation()
 var app = builder.Build();
 
 app.UseMiddleware()
-    .AddApiAndValidation();
+    .AddApi();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console(new JsonFormatter())

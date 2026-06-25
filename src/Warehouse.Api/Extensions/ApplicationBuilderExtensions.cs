@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using Warehouse.Api.Interfaces;
 using Warehouse.Api.Middleware;
-using Warehouse.Api.Services;
 using Warehouse.Api.Services.Background;
 using Warehouse.Api.Services.Communication;
+using Warehouse.Api.Services.Database;
 using Warehouse.Api.Validators;
 using Warehouse.Application.Interfaces.Communication;
 using Warehouse.Domain.Communication;
@@ -16,7 +16,7 @@ public static class ApplicationBuilderExtensions
 {
     extension(IServiceCollection services)
     {
-        internal IServiceCollection AddApiAndValidation()
+        internal IServiceCollection AddValidation()
         {
             services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
             services.AddOpenApi();
@@ -27,6 +27,7 @@ public static class ApplicationBuilderExtensions
         internal IServiceCollection RegisterServices()
         {
             services.AddSingleton<IOrderService, OrdersService>();
+            services.AddSingleton<IProductsService, ProductService>();
             return services;
         }
 
@@ -80,7 +81,7 @@ public static class ApplicationBuilderExtensions
             return app;
         }
 
-        internal WebApplication AddApiAndValidation()
+        internal WebApplication AddApi()
         {
             if (app.Environment.IsDevelopment())
             {

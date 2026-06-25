@@ -2,7 +2,11 @@
 
 public class ProductNotFoundException : WmsDomainException
 {
-    protected ProductNotFoundException(Guid productId) : base($"Product with id {productId} not found", 404)
+    public ProductNotFoundException(Guid productId) : base($"Product with id {productId} not found", 404)
+    {
+    }
+
+    public ProductNotFoundException(string sku) : base($"Product with id {sku} not found", 404)
     {
     }
 }

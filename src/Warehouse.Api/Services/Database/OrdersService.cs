@@ -3,7 +3,7 @@ using Warehouse.Infrastructure.Data;
 using Warehouse.Infrastructure.Dto;
 using Warehouse.Infrastructure.Enum;
 
-namespace Warehouse.Api.Services;
+namespace Warehouse.Api.Services.Database;
 
 public class OrdersService(IServiceProvider serviceProvider, IProductsService productsService) : IOrderService
 {
